@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"log"
 	"os"
 
 	"test-task/config"
@@ -14,7 +15,9 @@ type DataBase struct {
 }
 
 func NewDataBase() (*DataBase, error) {
-	err := config.LoadConfig()
+	if err := config.LoadConfig(); err != nil {
+		log.Fatalf("error to load configs: %s", err)
+	}
 
 	db, err := sql.Open(os.Getenv("DB_DRIVER"), fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s",
 		os.Getenv("DB_USER"),
